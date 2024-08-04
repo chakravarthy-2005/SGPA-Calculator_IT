@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        h3 {
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: gray;
+            color: #fff;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto; /* Center the button */
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #sgpaResult {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: red; /* Ensure result color is red */
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            table, th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+            input[type="number"] {
+                width: calc(100% - 18px);
+                padding: 8px;
+            }
+            button {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            form {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            table, th, td {
+                font-size: 12px;
+                padding: 6px;
+            }
+            input[type="number"] {
+                width: calc(100% - 14px);
+                padding: 6px;
+            }
+            button {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            form {
+                padding: 10px;
+            }
+            #sgpaResult {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>SGPA Calculator</h2>
+
+    <table>
+        <caption>Grade Points and Letter Grades</caption>
+        <thead>
+            <tr>
+                <th>% of Marks Secured</th>
+                <th>Letter Grade (UGC Guidelines)</th>
+                <th>Grade Points (GP)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Greater than or equal to 90 %</td>
+                <td>O (Outstanding)</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>80 and Less than 90 %</td>
+                <td>A+ (Excellent)</td>
+                <td>9</td>
+            </tr>
+            <tr>
+                <td>70 and Less than 80 %</td>
+                <td>A (Very Good)</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>60 and Less than 70 %</td>
+                <td>B+ (Good)</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>50 and Less than 60 %</td>
+                <td>B (Average)</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>40 and Less than 50 %</td>
+                <td>C (Pass)</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>Below 40 %</td>
+                <td>F (Fail)</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Absent</td>
+                <td>Ab</td>
+                <td>0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Enter Grade Points for Each Subject:</h3>
+
+    <form id="gradeForm">
+        <div id="subjectInputs"></div>
+        <button type="submit">Calculate SGPA</button>
+    </form>
+
+    <div id="sgpaResult"></div>
+
+    <footer>
+        All rights reserved. Developed by AKVS Chakravarthy with the assistance of AI by OpenAI.
+    </footer>
+
+    <script>
+        const subjects = [
+            "Discrete Mathematics",
+            "Business Economics & Financial Analysis",
+            "Operating Systems",
+            "Database Management Systems",
+            "Java Programming",
+            "Operating Systems Lab",
+            "Database Management Systems Lab",
+            "Java Programming Lab",
+            "Real-time Research Project/ Societal Related Project",
+            "Skill Development Course (Node JS/ React JS/ Django)"
+        ];
+
+        const form = document.getElementById('gradeForm');
+        const subjectInputs = document.getElementById('subjectInputs');
+
+        subjects.forEach(subject => {
+            const inputDiv = document.createElement('div');
+            inputDiv.innerHTML = `
+                <label for="${subject}">${subject}</label>
+                <input type="number" id="${subject}" name="${subject}" required>
+            `;
+            subjectInputs.appendChild(inputDiv);
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const marks = [];
+
+            subjects.forEach(subject => {
+                marks.push(parseInt(formData.get(subject)) || 0);
+            });
+
+            const sgpa = calculateSGPA(marks);
+            const sgpaResult = document.getElementById('sgpaResult');
+            sgpaResult.innerHTML = `<h3>Your SGPA: ${sgpa.toFixed(2)}</h3>`;
+        });
+
+        function calculateSGPA(marks) {
+            const creditWeights = [3, 3, 3, 3, 2, 1, 1, 1, 2, 1]; // Ensure these match Java
+
+            let sum = 0;
+            let totalCredits = 0;
+
+            for (let i = 0; i < marks.length; i++) {
+                sum += marks[i] * creditWeights[i];
+                totalCredits += creditWeights[i];
+            }
+
+            return sum / totalCredits;
+        }
+    </script>
+</body>
+</html>
